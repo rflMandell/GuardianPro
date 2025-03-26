@@ -1,11 +1,7 @@
 #fazer algumas partes separado para ir fazendo aos pouquinhos, ai quando terminar juntar com no main.py
 
 #login de verificacao dos medicos
-logins = {
-    'id_medico_1': {
-        'Nome': 'Nome Medico', 'CRM': '', 'senha': 'senha','hierarquia': '','Area': '', 'CPF': 'cpf sem espaco e simbolos', 
-        }
-    }
+logins = {}
 
 def forca_opcao(msg, opcao_validas, msg2):
     while True:
