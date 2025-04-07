@@ -1,7 +1,7 @@
 from django.urls import path 
-from .views import gerar_token, video_call_view
+from . import views
 
 urlpatterns = [
-    path("token/", gerar_token, name="gerar_token"),
-    path("video/", video_call_view, name="video_call"),
+    path("video/", views.video_call_view, name="video_call"),
+    path("get-token/", views.get_agora_token, name="get_agora_token"),
 ]

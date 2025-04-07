@@ -4,6 +4,7 @@ import random
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from agora_token_builder import RtcTokenBuilder
+from .agora_token import generate_agora_token
 from django.conf import settings
 from django.shortcuts import render
 
@@ -28,3 +29,11 @@ def gerar_token(request):
 
 def video_call_view(request):
     return render(request, 'chamadas/video_call.html')
+
+def get_agora_token(request):
+    channel_name = request.GET.get("channel")
+    if not channel_name:
+        return JsonResponse({"error": "Canal nao especificado"}, status=400)
+
+    token = generate_agora_token(channel_name)
+    return JsonResponde({"token": token})

@@ -10,21 +10,9 @@
     <div id="remote-playerlist"></div>
 
     <script>
-        const channel = "canal1";  // em breve isso n vai ser mais fixo
-        fetch(`/chamadas/token/?channel=${channel}`)
-            .then(response => response.json())
-            .then(data => {
-                const client = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
-                client.init(data.appID, () => {
-                    client.join(data.token, channel, data.uid, (uid) => {
-                        const localStream = AgoraRTC.createStream({ audio: true, video: true });
-                        localStream.init(() => {
-                            localStream.play('local-player');
-                            client.publish(localStream);
-                        });
-                    });
-                });
-            });
+        const APP_ID = "{{ AGORA_APP_ID }}"
+        const CHANNEL = "canal_teste"
+        {% comment %} continuo depois pq to cansado demais pra fazer isso {% endcomment %}
     </script>
 </body>
 </html>
