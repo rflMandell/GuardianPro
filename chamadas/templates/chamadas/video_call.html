@@ -5,9 +5,11 @@
     <script src="https://download.agora.io/sdk/release/AgoraRTC_N.js"></script>
 </head>
 <body>
-    <h2>Chamada de Vídeo</h2>
-    <div id="local-player"></div>
-    <div id="remote-playerlist"></div>
+    <h1>Chamada de Vídeo</h1>
+    <div id="local-player style="width: 400px; height: 300px; border: 1px solid black;"></div>
+    <div id="remote-playerlist style="width: 400px; height: 300px; border: 1px solid black;"></div>
+
+    <button id="join-btn">Entrar</button>
 
     <script>
         const APP_ID = "{{ AGORA_APP_ID }}"
