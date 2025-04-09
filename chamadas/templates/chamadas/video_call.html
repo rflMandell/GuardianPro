@@ -12,7 +12,36 @@
     <script>
         const APP_ID = "{{ AGORA_APP_ID }}"
         const CHANNEL = "canal_teste"
-        {% comment %} continuo depois pq to cansado demais pra fazer isso {% endcomment %}
+
+        async function getToken() {
+            const response = await fetch(`/chamada/get-token/?channel=${CHANNEL}`);
+            const data = await response.json();
+            return data.token;
+        }
+
+        let client = AgoraRTC.createClient({ mode: "rtc", codec: "vp8"});
+        let localTracks = [];
+
+        document.getElementById("join-btn").onclick = async function(){
+            const token = await getToken();
+            await client.join(APP_ID, CHANNEL, token, null);
+
+            localTracks = await AgoraRTC.createMicrophoneAndCameraTracks();
+            const localPlayer = document.getElementById("local-player");
+            localPlayer.innerHTML = "";
+            localPlayer.appendChild(localTracks[1].play());
+
+            await client.pulish(localTracks);
+        }
+
+        client.on("user-published", async(user,mediaType) => {
+            await client.subscribe(user, mediaType);
+            if (mediaType === "video"){
+                const remotePlayer = document.getElementById("remote-player");
+                remotePlayer.innerHTML = "";
+                remotePlayer.appendChild(user.videoTrack.play());
+            }
+        });
     </script>
 </body>
 </html>

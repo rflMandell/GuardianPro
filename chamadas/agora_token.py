@@ -1,5 +1,5 @@
 from agora_token_builder import RtcTokenBuilder
-from django,conf import settings
+from django.conf import settings
 import time
 
 def generate_agora_token(channel_name, uid=0):
