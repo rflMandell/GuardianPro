@@ -19,33 +19,37 @@
             const APP_ID = "{{ AGORA_APP_ID }}";
             const CHANNEL = "canal_teste";
 
-            async function getToken() {
-                const response = await fetch(`/chamada/get-token/?channel=${CHANNEL}`);
-                const data = await response.json();
-                console.log("Token recebido:", data.token);
-                return data.token;
-            }
-
             const client = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
             let localTracks = [];
 
-            document.getElementById("join-btn").onclick = async function () {
-                const token = await getToken();
-                await client.join(APP_ID, CHANNEL, token, null);
+            async function getToken() {
+                const response = await fetch(`/chamadas/get-token/?channel=${CHANNEL}`);
+                const data = await response.json();
+                console.log("Token recebido:", data.token);
+                return { token: data.token, uid: data.uid };
+            }
 
-                localTracks = await AgoraRTC.createMicrophoneAndCameraTracks();
+            document.getElementById("join-btn").addEventListener("click", async () => {
+                try {
+                    const { token, uid } = await getToken();
 
-                const localPlayer = document.getElementById("local-player");
-                localPlayer.innerHTML = "";
-                localTracks[1].play("local-player");
+                    await client.join(APP_ID, CHANNEL, token, uid);
+                    console.log("Entrou no canal com UID:", uid);
 
-                await client.publish(localTracks);
-                console.log("Publicando fluxo de mídia local...");
-            };
+                    localTracks = await AgoraRTC.createMicrophoneAndCameraTracks();
+
+                    localTracks[1].play("local-player");
+
+                    await client.publish(localTracks);
+                    console.log("Publicou os tracks de áudio/vídeo.");
+                } catch (err) {
+                    console.error("Erro ao entrar na chamada:", err);
+                }
+            });
 
             client.on("user-published", async (user, mediaType) => {
                 await client.subscribe(user, mediaType);
-                console.log("Usuário entrou:", user.uid);
+                console.log("Usuário conectado:", user.uid);
 
                 if (mediaType === "video") {
                     user.videoTrack.play("remote-player");
