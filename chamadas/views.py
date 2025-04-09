@@ -12,7 +12,7 @@ from django.shortcuts import render
 @csrf_exempt
 def gerar_token(request):
     app_id = settings.AGORA_APP_ID
-    app_certificate = settings.AOGRA_APP_CERTIFICATE
+    app_certificate = settings.AGORA_APP_CERTIFICATE
     channel_name = request.GET.get('channel')
     uid = random.randint(1,230)
     role = 1 # 1 = publisher (medico)
@@ -28,7 +28,7 @@ def gerar_token(request):
     return JsonResponse({'token': token, 'uid': uid, 'appID': app_id})
 
 def video_call_view(request):
-    return render(request, 'chamadas/video_call.html')
+    return render(request, 'chamadas/video_call.html', {"AGORA_APP_ID": settings.AGORA_APP_ID})
 
 def get_agora_token(request):
     channel_name = request.GET.get("channel")
@@ -36,4 +36,4 @@ def get_agora_token(request):
         return JsonResponse({"error": "Canal nao especificado"}, status=400)
 
     token = generate_agora_token(channel_name)
-    return JsonResponde({"token": token})
+    return JsonResponse({"token": token})
