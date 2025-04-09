@@ -1,65 +1,83 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chamada de Vídeo</title>
-    <script src="https://download.agora.io/sdk/release/AgoraRTC_N.js"></script>
+    <style>
+        video {
+            width: 600px;
+            height: 400px;
+            border: 2px solid black;
+        }
+
+        #mic-status {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background-color: rgba(0,0,0,0.7);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+    </style>
 </head>
 <body>
-    <h1>Chamada de Vídeo</h1>
-
-    <div id="local-player" style="width: 400px; height: 300px; border: 1px solid black;"></div>
-    <div id="remote-player" style="width: 400px; height: 300px; border: 1px solid black;"></div>
-
+    <h2>Chamada de Vídeo</h2>
+    <video id="local-video" autoplay muted></video><br>
     <button id="join-btn">Entrar</button>
+    <button id="toggle-mic-btn" style="display: none;">Ativar/Desativar Microfone</button>
 
+    <div id="mic-status" style="display: none;">🎤 Microfone: Ativo</div>
+
+    <script src="https://download.agora.io/sdk/release/AgoraRTC_N.js"></script>
     <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const APP_ID = "{{ AGORA_APP_ID }}";
-            const CHANNEL = "canal_teste";
+        const APP_ID = "{{ AGORA_APP_ID }}";
+        const CHANNEL = "canal_teste";
 
-            const client = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
-            let localTracks = [];
+        const client = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
 
-            async function getToken() {
+        let localAudioTrack;
+        let localVideoTrack;
+        let micOn = true;
+
+        document.getElementById("join-btn").onclick = async () => {
+            try {
                 const response = await fetch(`/chamadas/get-token/?channel=${CHANNEL}`);
                 const data = await response.json();
-                console.log("Token recebido:", data.token);
-                return { token: data.token, uid: data.uid };
+
+                await client.join(data.appID, CHANNEL, data.token, data.uid);
+
+                [localAudioTrack, localVideoTrack] = await AgoraRTC.createMicrophoneAndCameraTracks();
+
+                const videoPlayer = document.getElementById("local-video");
+                localVideoTrack.play(videoPlayer);
+                await client.publish([localAudioTrack, localVideoTrack]);
+
+                document.getElementById("toggle-mic-btn").style.display = "inline-block";
+                document.getElementById("mic-status").style.display = "block";
+
+            } catch (err) {
+                console.error("Erro ao entrar na chamada:", err);
+                alert("Erro ao entrar na chamada. Verifique a permissão da câmera e do microfone.");
             }
+        };
 
-            document.getElementById("join-btn").addEventListener("click", async () => {
-                try {
-                    const { token, uid } = await getToken();
-
-                    await client.join(APP_ID, CHANNEL, token, uid);
-                    console.log("Entrou no canal com UID:", uid);
-
-                    localTracks = await AgoraRTC.createMicrophoneAndCameraTracks();
-
-                    localTracks[1].play("local-player");
-
-                    await client.publish(localTracks);
-                    console.log("Publicou os tracks de áudio/vídeo.");
-                } catch (err) {
-                    console.error("Erro ao entrar na chamada:", err);
+        document.getElementById("toggle-mic-btn").onclick = async () => {
+            try {
+                if (micOn) {
+                    await localAudioTrack.setEnabled(false);
+                    document.getElementById("mic-status").innerText = "🔇 Microfone: Desativado";
+                } else {
+                    await localAudioTrack.setEnabled(true);
+                    document.getElementById("mic-status").innerText = "🎤 Microfone: Ativo";
                 }
-            });
-
-            client.on("user-published", async (user, mediaType) => {
-                await client.subscribe(user, mediaType);
-                console.log("Usuário conectado:", user.uid);
-
-                if (mediaType === "video") {
-                    user.videoTrack.play("remote-player");
-                }
-
-                if (mediaType === "audio") {
-                    user.audioTrack.play();
-                }
-            });
-        });
+                micOn = !micOn;
+            } catch (err) {
+                console.error("Erro ao alternar microfone:", err);
+                alert("Erro ao controlar o microfone.");
+            }
+        };
     </script>
 </body>
 </html>
