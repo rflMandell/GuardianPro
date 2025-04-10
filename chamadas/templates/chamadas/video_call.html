@@ -4,45 +4,78 @@
     <meta charset="UTF-8">
     <title>Chamada de Vídeo</title>
     <style>
-        #video-container {
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+          }
+      
+          h2 {
+            margin-bottom: 30px;
+          }
+      
+          .video-container {
             display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        #video-container > div {
+            justify-content: center;
+            gap: 40px;
+            margin-bottom: 20px;
             position: relative;
+          }
+      
+          .video-box {
+            background: white;
+            border: 2px solid #ccc;
+            border-radius: 20px;
+            padding: 10px;
+            position: relative;
+          }
+      
+          video {
             width: 400px;
             height: 300px;
-            border: 2px solid black;
-        }
-
-        #video-container > p {
+            border-radius: 12px;
+            border: 2px solid #000;
+          }
+      
+          .name-label {
+            margin-top: 10px;
+            font-weight: bold;
+          }
+      
+          #mic-status {
             position: absolute;
-            top: 0;
-            left: 0;
-            margin: 0;
-            padding: 2px 6px;
-            background: #000;
-            color: #fff;
-            font-size: 14px;
-        }
-
-        #mic-status {
-            position: absolute;
-            bottom: 20px;
-            right: 20px;
-            background-color: rgba(0,0,0,0.7);
+            bottom: 15px;
+            right: 15px;
+            background-color: rgba(0, 0, 0, 0.7);
             color: white;
-            padding: 8px 12px;
+            padding: 5px 10px;
             border-radius: 8px;
             font-size: 14px;
             display: none;
-        }
+          }
+      
+          .controls {
+            margin-top: 30px;
+          }
+      
+          .controls button {
+            font-size: 16px;
+            padding: 10px 20px;
+            margin: 0 10px;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+          }
+      
+          .controls button:hover {
+            background-color: #ddd;
+          }
     </style>
 </head>
 <body>
-    <h2>Chamada de Vídeo</h2>
+    <h2>Hospital Infantil Sabara</h2>
     
     <div id="video-container">
         <div id="local-player">
@@ -107,7 +140,61 @@
         };
 
         // continuar com  ocodigo para por os multiusuarios e o botao de saida
-        
+
+        document.getElementById("leave-btn").onclick = async () => {
+            try {
+                // Parar tracks
+                localAudioTrack && localAudioTrack.stop();
+                localAudioTrack && localAudioTrack.close();
+                localVideoTrack && localVideoTrack.stop();
+                localVideoTrack && localVideoTrack.close();
+
+                // Remover elementos de vídeo
+                document.getElementById("local-player").innerHTML = "<p>Você</p>";
+                document.getElementById("remote-player-container").innerHTML = "";
+
+                // Sair da chamada
+                await client.leave();
+
+                // Ocultar controles
+                document.getElementById("toggle-mic-btn").style.display = "none";
+                document.getElementById("leave-btn").style.display = "none";
+                document.getElementById("mic-status").style.display = "none";
+            } catch (err) {
+                console.error("Erro ao sair da chamada:", err);
+                alert("Erro ao sair da chamada.");
+            }
+        };
+
+        client.on("user-published", async (user, mediaType) => {
+            await client.subscribe(user, mediaType);
+            console.log("Usuario entrou:", user.uid);
+
+            let remotePlayer = document.getElementById(`remote-player-${user.uid}`);
+            if (!remotePlayer){
+                remotePlayer = document.createElement("div");
+                remotePlayer.id = `remote-player-${user.uid}`;
+                remotePlayer.style.width = "400px";
+                remotePlayer.style.height = "300px";
+                remotePlayer.style.border = "2px solid gray";
+                remotePlayer.style.position = "relative";
+                remotePLayer.innerHTML = `<p>Usuario ${user.uid}</p>`;
+                document.getElementById("remote-player-container").appendChild(remotePlayer);
+            }
+
+            if (mediaType === "video"){
+                user.videoTrack.play(remotePlayer);
+            }
+
+            if (mediaType === "audio"){
+                user.audioTrack.play();
+            }
+        });
+
+        client.on("user-unpublished", (user) => {
+            const remotePlayer = document.getElementById(`remotePlayer-${user.uid}`);
+            if (remotePlayer) remotePlayer.remove();
+        });
     </script>
 </body>
 </html>
