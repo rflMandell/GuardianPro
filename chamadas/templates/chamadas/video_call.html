@@ -4,10 +4,28 @@
     <meta charset="UTF-8">
     <title>Chamada de Vídeo</title>
     <style>
-        video {
-            width: 600px;
-            height: 400px;
+        #video-container {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        #video-container > div {
+            position: relative;
+            width: 400px;
+            height: 300px;
             border: 2px solid black;
+        }
+
+        #video-container > p {
+            position: absolute;
+            top: 0;
+            left: 0;
+            margin: 0;
+            padding: 2px 6px;
+            background: #000;
+            color: #fff;
+            font-size: 14px;
         }
 
         #mic-status {
@@ -19,16 +37,25 @@
             padding: 8px 12px;
             border-radius: 8px;
             font-size: 14px;
+            display: none;
         }
     </style>
 </head>
 <body>
     <h2>Chamada de Vídeo</h2>
-    <video id="local-video" autoplay muted></video><br>
+    
+    <div id="video-container">
+        <div id="local-player">
+            <p>Voce</p>
+        </div>
+        <div id="remote-player-container"></div>
+    </div>
+
     <button id="join-btn">Entrar</button>
     <button id="toggle-mic-btn" style="display: none;">Ativar/Desativar Microfone</button>
+    <button id="leave-btn" style="display: none;">Sair da Chamada</button>
 
-    <div id="mic-status" style="display: none;">🎤 Microfone: Ativo</div>
+    <div id="mic-status">🎤 Microfone: Ativo</div>
 
     <script src="https://download.agora.io/sdk/release/AgoraRTC_N.js"></script>
     <script>
@@ -50,13 +77,13 @@
 
                 [localAudioTrack, localVideoTrack] = await AgoraRTC.createMicrophoneAndCameraTracks();
 
-                const videoPlayer = document.getElementById("local-video");
-                localVideoTrack.play(videoPlayer);
+                const localPlayer = document.getElementById("local-player");
+                localVideoTrack.play(localPlayer);
                 await client.publish([localAudioTrack, localVideoTrack]);
 
                 document.getElementById("toggle-mic-btn").style.display = "inline-block";
+                document.getElementById("leave-btn").style.display = "inline-block";
                 document.getElementById("mic-status").style.display = "block";
-
             } catch (err) {
                 console.error("Erro ao entrar na chamada:", err);
                 alert("Erro ao entrar na chamada. Verifique a permissão da câmera e do microfone.");
@@ -78,6 +105,9 @@
                 alert("Erro ao controlar o microfone.");
             }
         };
+
+        // continuar com  ocodigo para por os multiusuarios e o botao de saida
+        
     </script>
 </body>
 </html>
