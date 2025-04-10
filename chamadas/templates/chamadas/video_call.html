@@ -78,28 +78,33 @@
     <h2>Hospital Infantil Sabara</h2>
     
     <div id="video-container">
-        <div id="local-player">
-            <p>Voce</p>
+        <div class="video-box">
+            <video id="local-player" autoplay muted></video>
+            <div id="local-name" class="name=label"></div>
+            <div id="mic-status">🎤 Microfone: Ativo</div>
         </div>
-        <div id="remote-player-container"></div>
+        <div class="video-box">
+            <div id="remote-player"></div>
+            <div id="remote-name" class="name-label"></div>
+        </div>
     </div>
 
-    <button id="join-btn">Entrar</button>
-    <button id="toggle-mic-btn" style="display: none;">Ativar/Desativar Microfone</button>
-    <button id="leave-btn" style="display: none;">Sair da Chamada</button>
-
-    <div id="mic-status">🎤 Microfone: Ativo</div>
+    <div class="controls">
+        <button id="join-btn">Entrar</button>
+        <button id="leave-btn" style="display: none;">Sair</button>
+        <button id="toggle-mic-btn" style="display: none;">Ativar/Desativar Microfone</button>
+    </div>
 
     <script src="https://download.agora.io/sdk/release/AgoraRTC_N.js"></script>
     <script>
         const APP_ID = "{{ AGORA_APP_ID }}";
         const CHANNEL = "canal_teste";
-
         const client = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
 
         let localAudioTrack;
         let localVideoTrack;
         let micOn = true;
+        let userName = "";
 
         document.getElementById("join-btn").onclick = async () => {
             try {
