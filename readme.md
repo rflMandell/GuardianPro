@@ -1,4 +1,4 @@
-# GuardianPro 🛡️  
+# GuardianPro
 **Plataforma SaaS de Telemedicina com Assistência por IA**  
 🚧 *Projeto em desenvolvimento ativo*
 
@@ -8,13 +8,11 @@ GuardianPro é uma plataforma web voltada para clínicas e profissionais de saú
 
 ## Funcionalidades (em progresso)
 
-- ✅ Chamadas de vídeo e voz com múltiplos usuários (via Agora.io)
-- ✅ Geração dinâmica de links para consultas
-- ✅ Alerta de status do microfone
+- ✅ Sistema de login com níveis de acesso (admin, médico, paciente)
+- ✅ Chamadas de vídeo e voz com múltiplos usuários
 - ⏳ Assistência por IA na criação de laudos médicos
 - ⏳ Gerenciamento de pacientes, médicos e consultas
 - ⏳ Armazenamento seguro de arquivos (nuvem)
-- ⏳ Sistema de login com níveis de acesso (admin, médico, paciente)
 
 ---
 
