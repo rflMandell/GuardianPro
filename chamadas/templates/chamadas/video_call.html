@@ -108,20 +108,26 @@
 
         document.getElementById("join-btn").onclick = async () => {
             try {
+                userName = prompt("Digite seu nome:");
+                if (!userName){
+                    alert("Nome e obrigatorio para entrar na chamada.");
+                    return;
+                }
+
                 const response = await fetch(`/chamadas/get-token/?channel=${CHANNEL}`);
                 const data = await response.json();
 
                 await client.join(data.appID, CHANNEL, data.token, data.uid);
 
                 [localAudioTrack, localVideoTrack] = await AgoraRTC.createMicrophoneAndCameraTracks();
-
-                const localPlayer = document.getElementById("local-player");
-                localVideoTrack.play(localPlayer);
+                localVideoTrack.play("local-player");
                 await client.publish([localAudioTrack, localVideoTrack]);
 
                 document.getElementById("toggle-mic-btn").style.display = "inline-block";
                 document.getElementById("leave-btn").style.display = "inline-block";
                 document.getElementById("mic-status").style.display = "block";
+                document.getElementById("local-name").textContent = `${userName}`;
+
             } catch (err) {
                 console.error("Erro ao entrar na chamada:", err);
                 alert("Erro ao entrar na chamada. Verifique a permissão da câmera e do microfone.");
@@ -144,51 +150,36 @@
             }
         };
 
-        // continuar com  ocodigo para por os multiusuarios e o botao de saida
-
         document.getElementById("leave-btn").onclick = async () => {
             try {
-                // Parar tracks
-                localAudioTrack && localAudioTrack.stop();
-                localAudioTrack && localAudioTrack.close();
-                localVideoTrack && localVideoTrack.stop();
-                localVideoTrack && localVideoTrack.close();
-
-                // Remover elementos de vídeo
-                document.getElementById("local-player").innerHTML = "<p>Você</p>";
-                document.getElementById("remote-player-container").innerHTML = "";
-
-                // Sair da chamada
                 await client.leave();
+                localAudioTrack?.close();
+                localVideoTrack?.close();
 
-                // Ocultar controles
+                document.getElementById("local-player").srcObject = null;
+                document.getElementById("remote-player").innerHTML = "";
+                document.getElementById("local-name").textContent = "";
+                document.getElementById("remote-name").textContent = "";
                 document.getElementById("toggle-mic-btn").style.display = "none";
                 document.getElementById("leave-btn").style.display = "none";
                 document.getElementById("mic-status").style.display = "none";
+                alert("Voce saiu da chamada.")
             } catch (err) {
                 console.error("Erro ao sair da chamada:", err);
-                alert("Erro ao sair da chamada.");
             }
         };
 
         client.on("user-published", async (user, mediaType) => {
             await client.subscribe(user, mediaType);
-            console.log("Usuario entrou:", user.uid);
-
-            let remotePlayer = document.getElementById(`remote-player-${user.uid}`);
-            if (!remotePlayer){
-                remotePlayer = document.createElement("div");
-                remotePlayer.id = `remote-player-${user.uid}`;
-                remotePlayer.style.width = "400px";
-                remotePlayer.style.height = "300px";
-                remotePlayer.style.border = "2px solid gray";
-                remotePlayer.style.position = "relative";
-                remotePLayer.innerHTML = `<p>Usuario ${user.uid}</p>`;
-                document.getElementById("remote-player-container").appendChild(remotePlayer);
-            }
 
             if (mediaType === "video"){
-                user.videoTrack.play(remotePlayer);
+                const remotePlayerContainer = document.getElementById("remote-player");
+                const remoteVideo = document.createElement("div");
+                remoteVideo.id = `remote-video-${user.uid}`;
+                remotePlayerContainer.innerHTML = ""; //limpa o conteudo anterior a ele
+                remotePlayerContainer.appendChild(remoteVideo);
+                user.videoTrack.play(remoteVideo);
+                document.getElementById("remote-name").textContent = `Participante #${user.uid}`;
             }
 
             if (mediaType === "audio"){
@@ -197,8 +188,9 @@
         });
 
         client.on("user-unpublished", (user) => {
-            const remotePlayer = document.getElementById(`remotePlayer-${user.uid}`);
-            if (remotePlayer) remotePlayer.remove();
+            const remoteVideo = document.getElementById(`remote-video-${user.uid}`);
+            if (remoteVideo) remoteVideo.remove();
+            document.getElementById("remote-name").textContent = "";
         });
     </script>
 </body>
