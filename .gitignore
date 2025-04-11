@@ -1,1 +1,52 @@
+# Ambiente virtual
+venv/
+ENV/
+env/
+*.pyc
+__pycache__/
+
+# Arquivos temporários do sistema
+.DS_Store
+Thumbs.db
+
+# Arquivos do Python
+*.log
+*.pot
+*.py[cod]
+*.sqlite3
+*.db
+
+# Diretórios do Django
+/staticfiles/
+media/
+*.bak
+
+# Configurações locais
+local_settings.py
 .env
+.env.*
+
+# VS Code
+.vscode/
+
+# Arquivos do sistema operacional
+*.swp
+*.swo
+
+# Arquivos de build/test
+coverage/
+htmlcov/
+*.cover
+.tox/
+.pytest_cache/
+nosetests.xml
+coverage.xml
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Arquivos de cache do pip
+pip-log.txt
+pip-delete-this-directory.txt
