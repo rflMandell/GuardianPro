@@ -50,20 +50,6 @@ python manage.py migrate
 python manage.py runserver
 ```
 
-# Roadmap (parcial)
-
-- ✅ Integração com Agora.io
-
-- ✅ Geração de links de chamada
-
-- ⏳ Integração com IA para auxílio em laudos
-
-- ⏳ Upload de arquivos e integração com nuvem
-
-- ⏳ Painel administrativo
-
-- ⏳ Interface para pacientes
-
 # Autor
 Desenvolvido por Rafael Mandel – estudante de Engenharia de Software com foco em soluções digitais para saúde.
 
