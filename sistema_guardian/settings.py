@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     
     'autenticacao', #add o app de autenticacao no django
     'chamadas', #add para o app de chamadas no django
+    'documentos', #add para o app de documentos no django
 ]
 
 MIDDLEWARE = [
