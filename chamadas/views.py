@@ -5,6 +5,7 @@ from django.conf import settings
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
 
 from agora_token_builder import RtcTokenBuilder
 
@@ -35,7 +36,8 @@ def get_agora_token(request):
         "uid": uid,
         "appID": app_id
     })
-
+    
+@login_required(login_url='/autenticacao/login/')
 def video_call_view(request):
     return render(request, "chamadas/video_call.html", {
         "AGORA_APP_ID": settings.AGORA_APP_ID

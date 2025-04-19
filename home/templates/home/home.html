@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Bem Vindo, {{ user.username }}!</h2>
+
+<a href="{% url 'chamada_inicio' %}"><button>Iniciar chamada de video</button></a>
+<a href="{% url 'upload_documento' %}"><button>Upload de Arquivo</button></a>
+<a href="{% url 'lista_documentos' %}"><button>Ver arquivos</button></a>
+<a href="{% url 'logout' %}"><button>Sair</button></a>
+
+{% endblock %}
