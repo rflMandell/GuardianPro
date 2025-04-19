@@ -1,0 +1,9 @@
+<h2>Documentos Enviados</h2>
+<ul>
+    {% for doc in documentos %}
+        <li>
+            {{ doc.nome_arquivo }} - {{ doc.tipo_arquivo }} - {{ doc.data_upload }}
+            <a href="{{ doc.arquivo.url }}">Baixar</a>
+        </li>
+    {% endfor %}
+</ul>
