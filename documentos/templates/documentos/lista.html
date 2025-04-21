@@ -2,8 +2,15 @@
 <ul>
     {% for doc in documentos %}
         <li>
-            {{ doc.nome_arquivo }} - {{ doc.tipo_arquivo }} - {{ doc.data_upload }}
-            <a href="{{ doc.arquivo.url }}">Baixar</a>
+            <strong>{{ doc.nome_arquivo }}</strong>
+            ({{ doc.tipo_arquivo|upper }}) - 
+            enviado em {{ doc.data_upload|date:"d/m/Y H:i" }}
+            —
+            <a href="{{ doc.arquivo.url }}" download>
+                📥 Baixar
+            </a>
         </li>
+    {% empty %}
+        <li>Nenhum documento enviado ainda.</li>
     {% endfor %}
 </ul>

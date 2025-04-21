@@ -17,6 +17,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+from django.conf.urls.static import static
+from django.conf import settings
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     # path("autenticacao/", include('autenticacao.urls')), #incluindo as rotas do app (autenticacao dos funcionarios)
@@ -24,3 +27,6 @@ urlpatterns = [
     path('documentos/', include('documentos.urls')), #incluindo as rotas dos documentos
     path('', include('home.urls')),  # incluindo as rotas da home
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
