@@ -11,7 +11,7 @@ def registrar_usuario(request):
             return redirect('login')
     else:
         form = RegistroForm()
-    return render(request, 'autenticacao/registro.html', {'form': form})
+    return redirect('autenticacao/login.html')
 
 def login_usuario(request):
     if request.method == 'POST':
