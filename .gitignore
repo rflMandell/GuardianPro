@@ -2,8 +2,9 @@
 venv/
 ENV/
 env/
-*.pyc
+
 __pycache__/
+*.pyc
 
 # Arquivos temporários do sistema
 .DS_Store
