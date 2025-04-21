@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'autenticacao', #add o app de autenticacao no django
     'chamadas', #add para o app de chamadas no django
     'documentos', #add para o app de documentos no django
+    'home', #add para o app da home no django
 ]
 
 MIDDLEWARE = [
@@ -137,6 +138,6 @@ AGORA_APP_CERTIFICATE = config("AGORA_APP_CERTIFICATE")
 
 # para redirecionar para a home apos o login :)
 
-LOGIN_URL = '/autenticacao/login/'
-LOGIN_REDIRECT_URL = 'home/templates/home/home.html/'
-LOGOUT_REDIRECT_URL = '/autenticacao/login/'
+# LOGIN_URL = '/autenticacao/login/'
+# LOGIN_REDIRECT_URL = 'home/templates/home/home.html/'
+# LOGOUT_REDIRECT_URL = '/autenticacao/login/'

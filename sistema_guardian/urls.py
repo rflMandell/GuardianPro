@@ -19,8 +19,8 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("autenticacao/", include('autenticacao.urls')), #incluindo as rotas do app (autenticacao dos funcionarios)
+    # path("autenticacao/", include('autenticacao.urls')), #incluindo as rotas do app (autenticacao dos funcionarios)
     path("chamadas/", include('chamadas.urls')),
     path('documentos/', include('documentos.urls')), #incluindo as rotas dos documentos
-    path('', include('home.urls')), #incluindo as rotas da home
+    path('', include('home.urls')),  # incluindo as rotas da home
 ]

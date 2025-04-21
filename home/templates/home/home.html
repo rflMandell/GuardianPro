@@ -1,11 +1,43 @@
-{% extends "base.html" %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Home - GuardianPro</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 2rem;
+            background-color: #f5f5f5;
+        }
 
-{% block content %}
-<h2>Bem Vindo, {{ user.username }}!</h2>
+        h2 {
+            color: #333;
+        }
 
-<a href="{% url 'chamada_inicio' %}"><button>Iniciar chamada de video</button></a>
-<a href="{% url 'upload_documento' %}"><button>Upload de Arquivo</button></a>
-<a href="{% url 'lista_documentos' %}"><button>Ver arquivos</button></a>
-<a href="{% url 'logout' %}"><button>Sair</button></a>
+        a {
+            margin: 0.5rem;
+            text-decoration: none;
+        }
 
-{% endblock %}
+        button {
+            padding: 0.7rem 1.2rem;
+            background-color: #6200ea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #3700b3;
+        }
+    </style>
+</head>
+<body>
+    <h2>Bem-vindo!</h2>
+
+    <a href="{% url 'video_call' %}"><button>Iniciar chamada de vídeo</button></a>
+    <a href="{% url 'upload_documento' %}"><button>Upload de Arquivo</button></a>
+    <a href="{% url 'lista_documentos' %}"><button>Ver arquivos</button></a>
+</body>
+</html>

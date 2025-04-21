@@ -15,11 +15,13 @@ class Documento(models.Model):
     tamanho_arquivo = models.PositiveIntegerField()
     data_upload = models.DateTimeField(auto_now_add=True)
 
-    enviado_por = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
-        related_name='documentos_enviados'
-    )
+    # Campo opcional, se quiser usar depois
+    # enviado_por = models.ForeignKey(
+    #     settings.AUTH_USER_MODEL,
+    #     on_delete=models.CASCADE,
+    #     related_name='documentos_enviados'
+    # )
+
     tipo_usuario = models.CharField(max_length=10, choices=TIPO_USUARIO_CHOICES)
 
     paciente = models.ForeignKey(
