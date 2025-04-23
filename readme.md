@@ -2,27 +2,26 @@
 **Plataforma SaaS de Telemedicina com Assistência por IA**  
 🚧 *Projeto em desenvolvimento ativo*
 
-GuardianPro é uma plataforma web voltada para clínicas e profissionais de saúde, oferecendo uma solução completa para telemedicina. O sistema inclui chamadas de vídeo, geração automática de laudos com suporte de IA, gerenciamento de pacientes, prontuários e armazenamento em nuvem — tudo com foco na eficiência e segurança do atendimento médico.
+GuardianPro é uma plataforma web voltada para clínicas e profissionais de saúde, oferecendo uma solução completa para telemedicina. O sistema inclui chamadas de vídeo, armazenamento seguro de documentos médicos, e interface simples de navegação — tudo com foco na eficiência e segurança do atendimento médico.
 
 ---
 
-## Funcionalidades (em progresso)
+## Funcionalidades Concluídas
 
-- ✅ Sistema de login com níveis de acesso (admin, médico, paciente)
-- ✅ Chamadas de vídeo e voz com múltiplos usuários
+- ✅ Chamadas de vídeo com múltiplos usuários e armazenamento de seus metadados
+- ✅ Upload, listagem e download de documentos
+- ⏳ Sistema de login e registro (desativado temporariamente)
 - ⏳ Assistência por IA na criação de laudos médicos
-- ⏳ Gerenciamento de pacientes, médicos e consultas
-- ⏳ Armazenamento seguro de arquivos (nuvem)
+- ⏳ Gerenciamento de pacientes e médicos com permissões específicas
 
 ---
 
 ## Tecnologias Utilizadas
 
-- **Back-end:** Python, Django, Django REST Framework
-- **Front-end:** HTML, CSS, JavaScript, Tailwind CSS
-- **Futuro:** React, FastAPI (para serviços de IA)
-- **Banco de Dados:** SQLite (desenvolvimento), PostgreSQL (produção)
-- **Integrações:** Agora.io, OpenAI API
+- **Back-end:** Python, Django
+- **Front-end:** HTML, CSS, JavaScript
+- **Banco de Dados:** SQLite
+- **Serviços Externos:** Agora.io
 - **Controle de Versão:** Git e GitHub
 
 ---
@@ -33,12 +32,12 @@ GuardianPro é uma plataforma web voltada para clínicas e profissionais de saú
 
 ```bash
 # Clone o repositório
-git clone https://github.com/seu-usuario/guardianpro.git
-cd guardianpro
+git clone https://github.com/rflMandell/GuardianPro
+cd GuardianPro
 
 # Crie e ative o ambiente virtual
 python -m venv venv
-source venv/bin/activate  # ou venv\Scripts\activate no Windows
+source venv\Scripts\activate no Windows
 
 # Instale as dependências
 pip install -r requirements.txt
