@@ -136,8 +136,11 @@ AUTH_USER_MODEL = 'autenticacao.Usuario'
 AGORA_APP_ID = config("AGORA_APP_ID")
 AGORA_APP_CERTIFICATE = config("AGORA_APP_CERTIFICATE")
 
+import os
+
+#para acessar os arquivos e caminho ate eles asasa
 MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # para redirecionar para a home apos o login :)
 

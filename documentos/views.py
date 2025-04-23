@@ -10,7 +10,7 @@ def upload_documento(request):
         form = DocumentoForm(request.POST, request.FILES)
         if form.is_valid():
             documento = form.save(commit=False)
-            # documento.enviado_por = request.user
+            # documento.enviado_por = request.user # nao vou usar por aogra e nem sei se vou usar ainda mas deixa ai pq vai q ne
             documento.save()
             return redirect('lista_documentos')
     else:

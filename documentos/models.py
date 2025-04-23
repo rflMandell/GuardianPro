@@ -14,15 +14,14 @@ class Documento(models.Model):
     tipo_arquivo = models.CharField(max_length=50)
     tamanho_arquivo = models.PositiveIntegerField()
     data_upload = models.DateTimeField(auto_now_add=True)
+    tipo_usuario = models.CharField(max_length=10, choices=TIPO_USUARIO_CHOICES)
 
-    # Campo opcional, se quiser usar depois
+    # usar depois
     # enviado_por = models.ForeignKey(
     #     settings.AUTH_USER_MODEL,
     #     on_delete=models.CASCADE,
     #     related_name='documentos_enviados'
     # )
-
-    tipo_usuario = models.CharField(max_length=10, choices=TIPO_USUARIO_CHOICES)
 
     paciente = models.ForeignKey(
         settings.AUTH_USER_MODEL,

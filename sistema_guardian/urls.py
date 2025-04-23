@@ -26,7 +26,4 @@ urlpatterns = [
     path("chamadas/", include('chamadas.urls')),
     path('documentos/', include('documentos.urls')), #incluindo as rotas dos documentos
     path('', include('home.urls')),  # incluindo as rotas da home
-]
-
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
