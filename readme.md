@@ -50,7 +50,7 @@ python manage.py runserver
 ```
 
 # Autor
-Desenvolvido por Rafael Mandel – estudante de Engenharia de Software com foco em soluções digitais para saúde.
+Desenvolvido por Rafael Mandel, Luis Felipe Crivellaro e Felipe Lima – estudantes de Engenharia de Software com foco em soluções digitais para saúde.
 
 # Licença
 Este projeto está sob a licença MIT. Veja o arquivo LICENSE para mais detalhes.
