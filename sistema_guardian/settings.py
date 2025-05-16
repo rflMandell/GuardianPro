@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 from decouple import config
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -26,7 +27,14 @@ SECRET_KEY = 'django-insecure-21+b66v+h_bolv#hj6%yv_^qh9+7lyl5vcvk+ma7trv%u2o+uo
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    config("YOUR_DOMAIN", default="") #em breve vou por meu dominio aqui do ngrok
+]
+
+if DEBUG and config("YOUR_DOMAIN", default=""):
+    ALLOWED_HOSTS.append(config("YOUR_DOMAIN"))
 
 
 # Application definition
@@ -43,6 +51,7 @@ INSTALLED_APPS = [
     'chamadas', #add para o app de chamadas no django
     'documentos', #add para o app de documentos no django
     'home', #add para o app da home no django
+    'laudos_ia' #add paa o app de laudos com ia no django
 ]
 
 MIDDLEWARE = [
@@ -133,10 +142,22 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 #minhas coisas no settings
 AUTH_USER_MODEL = 'autenticacao.Usuario'
 
-AGORA_APP_ID = config("AGORA_APP_ID")
-AGORA_APP_CERTIFICATE = config("AGORA_APP_CERTIFICATE")
+AGORA_APP_ID = config("AGORA_APP_ID", default="")
+AGORA_APP_CERTIFICATE = config("AGORA_APP_CERTIFICATE", default="")
+AGORA_CUSTOMER_ID = config("AGORA_CUSTOMER_ID", default="")
+AGORA_CUSTOMER_SECRET = config("AGORA_CUSTOMER_SECRET", default="")
 
-import os
+OPENAI_API_KEY = config("OPENAI_API_KEY", default="")
+
+AWS_ACCESS_KEY_ID = config("AWS_ACCESS_KEY_ID", default="")
+AWS_SECRET_ACCESS_KEY = config("AWS_SECRET_ACCESS_KEY", default="")
+AWS_STORAGE_BUCKET_NAME = config("AWS_STORAGE_BUCKET_NAME", default="")
+AWS_S3_REGION_NAME = config("AWS_S3_REGION_NAME", default="us-east-1")
+
+AWS_S3_ENDPOINT_URL = f'https://s3.{AWS_S3_REGION_NAME}.amazonaws.com'
+
+YOUR_DOMAIN = config("YOUR_DOMAIN", default="localhost:8000") #depois atualizar com o ngrok URL
+
 
 #para acessar os arquivos e caminho ate eles asasa
 MEDIA_URL = '/media/'
