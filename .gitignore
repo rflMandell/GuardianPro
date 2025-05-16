@@ -51,3 +51,6 @@ build/
 # Arquivos de cache do pip
 pip-log.txt
 pip-delete-this-directory.txt
+
+# rascunhos de codigo/pensamentos
+rasquinhos.md
