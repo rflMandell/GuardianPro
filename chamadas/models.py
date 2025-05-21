@@ -24,13 +24,13 @@ class Chamada(models.Model):
     medico = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         related_name='chamadas_como_medico',
-        on_delete=models.SET_NULL,
+        on_delete=models.CASCADE,
         null=True
     )
     paciente = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         related_name='chamadas_como_paciente',
-        on_delete=models.SET_NULL,
+        on_delete=models.CASCADE,
         blank=True
     )
     status = models.CharField(max_length=30, choices=STATUS_CHOICES, default='PENDENTE')
