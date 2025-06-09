@@ -65,4 +65,4 @@ class Chamada(models.Model):
         if self.arquivo_audio_gravado:
             if os.path.isfile(self.arquivo_audio_gravado.path):
                 os.remove(self.arquivo_audio_gravado.path)
-        super().delete(*args, **kwargs)
+        super().delete(*arg, **kwargs)
