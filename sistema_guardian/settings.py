@@ -164,8 +164,6 @@ OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
 # Optional Ngrok
 WEBHOOK_BASE_URL = os.getenv('WEBHOOK_BASE_URL')
 
-
-
 #para acessar os arquivos e caminho ate eles asasa
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
