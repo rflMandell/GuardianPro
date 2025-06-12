@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block title %}Detalhe do Laudo - Chamada {{ laudo.chamada.canal }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Detalhe do Laudo - Chamada: {{ laudo.chamada.canal }}</h2>
+    <p><strong>Status do Laudo:</strong> <span class="badge bg-primary">{{ laudo.get_status_display }}</span></p>
+    <p><strong>Data da Chamada:</strong> {{ laudo.chamada.timestamp_inicio|date:"d/m/Y H:i" }}</p>
+    {% if laudo.chamada.paciente %}
+        <p><strong>Paciente:</strong> {{ laudo.chamada.paciente.get_full_name|default:laudo.chamada.paciente.username }}</p>
+    {% endif %}
+    <p><strong>Médico Responsável:</strong> {{ laudo.medico_responsavel.get_full_name|default:laudo.medico_responsavel.username }}</p>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="card mt-3">
+        <div class="card-header">
+            Transcrição do Áudio
+        </div>
+        <div class="card-body" style="max-height: 300px; overflow-y: auto; white-space: pre-wrap;">
+            {{ laudo.transcricao_texto|default:"Transcrição não disponível ou ainda não processada." }}
+        </div>
+    </div>
+
+    <div class="card mt-3">
+        <div class="card-header">
+            Laudo Preliminar Gerado por IA ({{ laudo.modelo_ia_utilizado|default:"Modelo não especificado" }})
+        </div>
+        <div class="card-body" style="white-space: pre-wrap;">
+            {{ laudo.laudo_preliminar_ia|default:"Laudo IA não disponível ou ainda não processado." }}
+        </div>
+    </div>
+
+    {% if laudo.status == 'REVISADO_FINALIZADO' %}
+        <div class="card mt-3">
+            <div class="card-header">
+                Laudo Finalizado
+            </div>
+            <div class="card-body" style="white-space: pre-wrap;">
+                {{ laudo.laudo_final_editado }}
+            </div>
+            <div class="card-footer">
+                Finalizado em: {{ laudo.data_finalizacao_revisao|date:"d/m/Y H:i" }}
+            </div>
+        </div>
+    {% endif %}
+
+    <div class="mt-4">
+        {% if laudo.status == 'AGUARDANDO_REVISAO' or laudo.status == 'ERRO_GERACAO_IA' or laudo.status == 'ERRO_TRANSCRICAO' %}
+            <a href="{% url 'laudos_ia:editar_laudo_medico' laudo.id %}" class="btn btn-primary">Revisar e Editar Laudo</a>
+        {% endif %}
+        <a href="{% url 'laudos_ia:listar_laudos_pendentes' %}" class="btn btn-secondary">Voltar para Lista</a>
+    </div>
+
+    {% if laudo.prompt_utilizado_ia and request.user.is_superuser %} {# Apenas para admin ver o prompt #}
+    <div class="card mt-3">
+        <div class="card-header">
+            Prompt Utilizado para IA (Admin View)
+        </div>
+        <div class="card-body" style="max-height: 200px; overflow-y: auto; white-space: pre-wrap; font-size: 0.8em; background-color: #f8f9fa;">
+            {{ laudo.prompt_utilizado_ia }}
+        </div>
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}

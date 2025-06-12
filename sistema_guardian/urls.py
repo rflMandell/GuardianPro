@@ -25,5 +25,10 @@ urlpatterns = [
     # path("autenticacao/", include('autenticacao.urls')), #incluindo as rotas do app (autenticacao dos funcionarios)
     path("chamadas/", include('chamadas.urls')),
     path('documentos/', include('documentos.urls')), #incluindo as rotas dos documentos
+    path('laudos/', include('laudos_ia.urls')),
     path('', include('home.urls')),  # incluindo as rotas da home
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

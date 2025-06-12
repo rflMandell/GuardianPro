@@ -15,9 +15,7 @@ from django.core.files.base import ContentFile
 from agora_token_builder import RtcTokenBuilder
 from .models import Chamada
 from laudos_ia.models import LaudoMedico # Para criar o LaudoMedico após gravação
-
-# Importar os serviços de IA
-from laudos_ia.services import iniciar_processamento_laudo_async # Ou síncrono por enquanto
+from laudos_ia.services import *
 
 #--- Configurações da API REST da Agora ---
 
@@ -350,13 +348,16 @@ def agora_recording_webhook(request):
                             if not created and laudo.status not in ['PENDENTE_TRANSCRICAO', 'ERRO_TRANSCRICAO', 'ERRO_GERACAO_IA']:
                                 print(f"Webhook (SID: {sid}): Laudo para chamada {chamada.id} já existe e está sendo processado ou finalizado (Status: {laudo.status}).")
                             else:
-                                laudo.status = 'PENDENTE_TRANSCRICAO'
-                                laudo.save()
+                                if laudo.status != 'PENDENTE_TRANSCRICAO': 
+                                    laudo.status = 'PENDENTE_TRANSCRICAO'
+                                    laudo.save(update_fields=['status']) 
+
                                 print(f"Webhook (SID: {sid}): LaudoMedico ID {laudo.id} criado/atualizado. Disparando processamento.")
-                                # Chamar a função de processamento (síncrona por enquanto)
-                                from laudos_ia.services import processar_audio_e_gerar_laudo
-                                processar_audio_e_gerar_laudo(laudo.id)
-                            break
+                                # Chamar a função de processamento
+                                processar_audio_e_gerar_laudo(laudo.id) 
+
+                            break # Processamos o primeiro MP3 encontrado
+
                         except requests.exceptions.RequestException as e_download:
                             print(f"Webhook (SID: {sid}): Erro ao baixar áudio '{s3_file_key}' do S3: {e_download}")
                             chamada.status = 'ERRO_GRAVACAO'
