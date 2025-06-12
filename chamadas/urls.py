@@ -12,5 +12,5 @@ urlpatterns = [
     path('api/stop_recording/', views.parar_gravacao_nuvem, name='api_stop_recording'),
     
     # Webhook da Agora
-    path('agora_recording_webhook/',)
+    path('agora_recording_webhook/', views.agora_recording_webhook, name='agora_recording_webhook'),
 ]

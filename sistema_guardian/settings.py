@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from pathlib import Path
 from decouple import config
 import os
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -69,7 +70,9 @@ ROOT_URLCONF = 'sistema_guardian.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            os.path.join(BASE_DIR, 'templates')
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -140,31 +143,30 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 #minhas coisas no settings
-AUTH_USER_MODEL = 'autenticacao.Usuario'
+# Carrega as variáveis do arquivo .env
+load_dotenv(os.path.join(BASE_DIR, '.env')) # Ou apenas load_dotenv() se .env estiver na mesma pasta que manage.py
 
-AGORA_APP_ID = config("AGORA_APP_ID", default="")
-AGORA_APP_CERTIFICATE = config("AGORA_APP_CERTIFICATE", default="")
-AGORA_CUSTOMER_ID = config("AGORA_CUSTOMER_ID", default="")
-AGORA_CUSTOMER_SECRET = config("AGORA_CUSTOMER_SECRET", default="")
+# Agora.io Settings
+AGORA_APP_ID = os.getenv('AGORA_APP_ID')
+AGORA_APP_CERTIFICATE = os.getenv('AGORA_APP_CERTIFICATE')
+AGORA_CUSTOMER_ID = os.getenv('AGORA_CUSTOMER_ID')
+AGORA_CUSTOMER_CERTIFICATE = os.getenv('AGORA_CUSTOMER_CERTIFICATE')
 
-OPENAI_API_KEY = config("OPENAI_API_KEY", default="")
+# AWS S3 Settings
+AWS_S3_BUCKET_NAME = os.getenv('AWS_S3_BUCKET_NAME')
+AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
+AWS_S3_REGION_NAME = os.getenv('AWS_S3_REGION_NAME')
 
-AWS_ACCESS_KEY_ID = config("AWS_ACCESS_KEY_ID", default="")
-AWS_SECRET_ACCESS_KEY = config("AWS_SECRET_ACCESS_KEY", default="")
-AWS_STORAGE_BUCKET_NAME = config("AWS_STORAGE_BUCKET_NAME", default="")
-AWS_S3_REGION_NAME = config("AWS_S3_REGION_NAME", default="us-east-1")
+# OpenAI Settings
+OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
 
-AWS_S3_ENDPOINT_URL = f'https://s3.{AWS_S3_REGION_NAME}.amazonaws.com'
+# Optional Ngrok
+WEBHOOK_BASE_URL = os.getenv('WEBHOOK_BASE_URL')
 
-YOUR_DOMAIN = config("YOUR_DOMAIN", default="localhost:8000") #depois atualizar com o ngrok URL
 
 
 #para acessar os arquivos e caminho ate eles asasa
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-# para redirecionar para a home apos o login :)
-
-# LOGIN_URL = '/autenticacao/login/'
-# LOGIN_REDIRECT_URL = 'home/templates/home/home.html/'
-# LOGOUT_REDIRECT_URL = '/autenticacao/login/'
