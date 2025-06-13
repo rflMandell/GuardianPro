@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 from decouple import config
+import os
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -26,7 +28,14 @@ SECRET_KEY = 'django-insecure-21+b66v+h_bolv#hj6%yv_^qh9+7lyl5vcvk+ma7trv%u2o+uo
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    config("YOUR_DOMAIN", default="") #em breve vou por meu dominio aqui do ngrok
+]
+
+if DEBUG and config("YOUR_DOMAIN", default=""):
+    ALLOWED_HOSTS.append(config("YOUR_DOMAIN"))
 
 
 # Application definition
@@ -43,6 +52,7 @@ INSTALLED_APPS = [
     'chamadas', #add para o app de chamadas no django
     'documentos', #add para o app de documentos no django
     'home', #add para o app da home no django
+    'laudos_ia' #add paa o app de laudos com ia no django
 ]
 
 MIDDLEWARE = [
@@ -60,7 +70,9 @@ ROOT_URLCONF = 'sistema_guardian.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            os.path.join(BASE_DIR, 'templates')
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -131,19 +143,28 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 #minhas coisas no settings
-AUTH_USER_MODEL = 'autenticacao.Usuario'
+# Carrega as variáveis do arquivo .env
+load_dotenv(os.path.join(BASE_DIR, '.env')) # Ou apenas load_dotenv() se .env estiver na mesma pasta que manage.py
 
-AGORA_APP_ID = config("AGORA_APP_ID")
-AGORA_APP_CERTIFICATE = config("AGORA_APP_CERTIFICATE")
+# Agora.io Settings
+AGORA_APP_ID = os.getenv('AGORA_APP_ID')
+AGORA_APP_CERTIFICATE = os.getenv('AGORA_APP_CERTIFICATE')
+AGORA_CUSTOMER_ID = os.getenv('AGORA_CUSTOMER_ID')
+AGORA_CUSTOMER_CERTIFICATE = os.getenv('AGORA_CUSTOMER_CERTIFICATE')
 
-import os
+# AWS S3 Settings
+AWS_S3_BUCKET_NAME = os.getenv('AWS_S3_BUCKET_NAME')
+AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
+AWS_S3_REGION_NAME = os.getenv('AWS_S3_REGION_NAME')
+
+# OpenAI Settings
+OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
+
+# Optional Ngrok
+WEBHOOK_BASE_URL = os.getenv('WEBHOOK_BASE_URL')
 
 #para acessar os arquivos e caminho ate eles asasa
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-# para redirecionar para a home apos o login :)
-
-# LOGIN_URL = '/autenticacao/login/'
-# LOGIN_REDIRECT_URL = 'home/templates/home/home.html/'
-# LOGOUT_REDIRECT_URL = '/autenticacao/login/'

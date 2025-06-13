@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}{{ Laudos }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>{{ Laudos }}</h2>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    {% if laudos %}
+        <div class="list-group mt-3">
+            {% for laudo in laudos %}
+                <a href="{% url 'laudos_ia:detalhe_laudo_medico' laudo.id %}" class="list-group-item list-group-item-action">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h5 class="mb-1">Laudo da Chamada: {{ laudo.chamada.canal }} (ID: {{ laudo.chamada.id }})</h5>
+                        <small>Data: {{ laudo.data_criacao|date:"d/m/Y H:i" }}</small>
+                    </div>
+                    <p class="mb-1">Status: <span class="badge bg-info text-dark">{{ laudo.get_status_display }}</span></p>
+                    {% if laudo.chamada.paciente %}
+                        <small>Paciente: {{ laudo.chamada.paciente.get_full_name|default:laudo.chamada.paciente.username }}</small>
+                    {% else %}
+                        <small>Paciente: Não especificado</small>
+                    {% endif %}
+                </a>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="mt-3">Nenhum laudo encontrado.</p>
+    {% endif %}
+
+    {% if titulo_pagina == "Laudos Pendentes de Revisão" %}
+        <div class="mt-3">
+            <a href="{% url 'laudos_ia:listar_todos_laudos' %}" class="btn btn-secondary">Ver Todos os Meus Laudos</a>
+        </div>
+    {% elif titulo_pagina == "Todos os Meus Laudos" %}
+         <div class="mt-3">
+            <a href="{% url 'laudos_ia:listar_laudos_pendentes' %}" class="btn btn-primary">Ver Laudos Pendentes</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
